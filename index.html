@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senha</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <img src="img/cadeado.png" alt="" width="35px;">
+
+        <h1>Gerar Senha</h1>
+        <div class="password-container">
+            <span id="password"></span>
+            <button id="copy"><img src="img/copiar-alt.png" width="20px" alt=""></button>    
+        </div>
+
+        <div class="item" id="password-items">
+            <div class="item">
+                <input type="number" id="size" name="size" min="1">
+                <label for="size">Quantidade de caracteres</label>
+            </div>
+        </div>
+
+        <div class="item">
+            <input type="checkbox" name="include_uppercase" id="include_uppercase">
+            <label for="include_uppercase">Incluir letra maiúscula</label>
+        </div>
+        
+        <div class="item">
+            <input type="checkbox" name="include_lowercase" id="include_lowercase">
+            <label for="include_lowercase">Incluir letra minúscula</label>
+        </div>
+        
+        <div class="item">
+            <input type="checkbox" name="include_number" id="include_number">
+            <label for="include_number">Incluir número</label>
+        </div>
+        <div class="item">
+            <input type="checkbox" name="include_specialcarac" id="include_specialcarac">
+            <label for="include_specialcarac">Incluir caractere especial</label>
+        </div>
+        <button id="generate">Gerar Senha</button>
+
+    </div>
+
+    <script>
+        function getCharTypes() {
+            const uppercase = document.querySelector("#include_uppercase").checked;
+            const lowercase = document.querySelector("#include_lowercase").checked;
+            const number = document.querySelector("#include_number").checked;
+            const special = document.querySelector("#include_specialcarac").checked;
+            const charTypes = [];
+
+            if (uppercase) {
+                charTypes.push("ABCDEFGHIJKTLMNPQVYXZ");
+            }
+            if (lowercase) {
+                charTypes.push('abcdefghijkmnopqrstuvwxyz');
+            }
+            if (number) {
+                charTypes.push("1234567890");
+            }
+            if (special) {
+                charTypes.push("ç/;}{`^!_-:|?<>");
+            }
+
+            return charTypes;
+        }
+
+        function randomCharFromType(charType) {
+            const randomIndex = Math.floor(Math.random() * charType.length);
+            return charType[randomIndex];
+        }
+
+        function generatePassword() {
+            const size = parseInt(document.querySelector('#size').value) || 8;
+            const charTypes = getCharTypes();
+            if (charTypes.length === 0) {
+                return '';
+            }
+
+            let password = '';
+            for (let i = 0; i < size; i++) {
+                const randomType = randomCharFromType(charTypes);
+                password += randomCharFromType(randomType);
+            }
+
+            return password;
+        }
+
+        document.querySelector('#generate').addEventListener('click', function() {
+            const password = generatePassword();
+            document.querySelector('#password').textContent = password;
+        });
+    </script>
+</body>
+</html>
